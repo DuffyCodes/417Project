@@ -28,10 +28,18 @@ map<int, vector<float>> convertToMap(vector<CoreTempReading> readings){
 /*
  * Turn the data into a function.
  * y = y0 + (y1 - y0)/(x1 - x0) * x - (y1 - y0)/(x1 - x0) * x0
+ * b = y0 - mx0
  */
 
+float calcSlope(map<int,vector<float>> m, int key){
+	auto it = m.begin();
+	float yChange = m.find(key)->second[it->second.size()-1] - m.find(key)->second[0];
+	float xChange = (it->second.size()-1);
+	cout <<"slope: "<<yChange<<"/"<<xChange<<" = "<< yChange/xChange<<endl;
+	return 0;
+}
 
-
-float Function::calcM(float y0, float y1, float x0, float x1){
-	return (y1 - y0)/(x1 - x0);
+float calcIntercept(map<int, vector<float>>m, float slope, int key){
+	float mx0 = slope * 30;
+	return m.find(key)->second[0] - mx0;
 }

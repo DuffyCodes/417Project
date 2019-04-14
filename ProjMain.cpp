@@ -33,6 +33,9 @@ int main(int argc, char** argv)
     // Convert the readings to a map (easier for me to manipulate)
     map<int, vector<float>> easierReadings = convertToMap(readings);
 
+    float slope = calcSlope(easierReadings, 1);
+    float intercept = calcIntercept(easierReadings, slope, 1);
+    cout << "intercept: "<<intercept<<endl;
     /*
     *
     *debugging stuffs
