@@ -1,3 +1,7 @@
 /build/
 /.project
 /.cproject
+/SemesterProj
+/parseTemps.o
+/processTemps.o
+/ProjMain.o
