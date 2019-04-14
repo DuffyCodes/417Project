@@ -1,25 +1,16 @@
-PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+MAINPROG=SemesterProj
 
-OBJS = 417SemesterProject.o
+SOURCES:=$(wildcard *.cpp)
+OBJECTS=$(SOURCES:.cpp=.o)
+FLAGS=-std=c++11 -fsanitize=address,leak  -Wall -fuse-ld=gold
 
-ifeq ($(BUILD_MODE),debug)
-	CFLAGS += -g
-else ifeq ($(BUILD_MODE),run)
-	CFLAGS += -O2
-else
-	$(error Build mode $(BUILD_MODE) not supported by this Makefile)
-endif
+all: $(SOURCES) $(MAINPROG)
 
-all:	417SemesterProject
+$(MAINPROG): $(OBJECTS)
+	g++ $(FLAGS) $(OBJECTS) -o $@
 
-417SemesterProject:	$(OBJS)
-	$(CXX) -o $@ $^
-
-%.o:	$(PROJECT_ROOT)%.cpp
-	$(CXX) -c $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -o $@ $<
-
-%.o:	$(PROJECT_ROOT)%.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+.cpp.o:
+	g++ $(FLAGS) -c $< -o $@
 
 clean:
-	rm -fr 417SemesterProject $(OBJS)
+	rm *.o $(MAINPROG)
