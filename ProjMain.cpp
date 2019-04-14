@@ -29,10 +29,9 @@ int main(int argc, char** argv)
     }
     // End Input Validation
 
-
-
     vector<CoreTempReading> readings = parse_raw_temps(input_temps);
-    map<int, vector<int>> easierReadings = convertToMap(readings);
+    // Convert the readings to a map (easier for me to manipulate)
+    map<int, vector<float>> easierReadings = convertToMap(readings);
 
     /*
     *
