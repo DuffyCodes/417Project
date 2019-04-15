@@ -1,14 +1,8 @@
 #include "parseTemps.h"
 #include "processTemps.h"
 #include <iostream>
-#include <iomanip>
 #include <fstream>
 #include <vector>
-#include <sstream>
-#include <memory>
-#include <iterator>
-#include <algorithm>
-#include <utility>
 #include <map>
 
 using namespace std;
@@ -32,10 +26,23 @@ int main(int argc, char** argv)
     vector<CoreTempReading> readings = parse_raw_temps(input_temps);
     // Convert the readings to a map (easier for me to manipulate)
     map<int, vector<float>> easierReadings = convertToMap(readings);
+    //auto it = easierReadings.begin();
 
-    float slope = calcSlope(easierReadings, 1);
-    float intercept = calcIntercept(easierReadings, slope, 1);
-    cout << "intercept: "<<intercept<<endl;
+    for(int i = 0; i < easierReadings.size(); i++){
+    	double slope = calcSlope(easierReadings, i+1);
+    	double intercept = calcIntercept(easierReadings, slope, i+1);
+    	ofstream core;
+    	char c = '0'+i;
+    	string coreNum = "core ";
+    	coreNum+=c;
+    	coreNum.append(".txt");
+    	core.open(coreNum);
+    	core << slope<<"x + "<<intercept<<endl;
+    	core.close();
+    	cout<<"core "<<i<<" finished. See .txt file"<<endl;
+    }
+
+    //cout << "line: "<<slope<<"x + "<<intercept<<endl;
     /*
     *
     *debugging stuffs
