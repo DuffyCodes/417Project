@@ -13,6 +13,7 @@
 #include <iterator>
 #include <algorithm>
 #include <utility>
+#include <map>
 
 /**
  * A pair of values where the
@@ -33,5 +34,7 @@ using CoreTempReading = std::pair<int, std::vector<double>>;
  */
 std::vector<CoreTempReading> parse_raw_temps(std::istream& original_temps,
                                              int step_size=30);
+
+std::map<int, std::vector<float>> convertToMap(std::vector<CoreTempReading> readings);
 
 #endif

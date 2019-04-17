@@ -14,7 +14,7 @@
 using namespace std;
 
 LeastSquares::LeastSquares(map<int, vector<float>> m) {
-	long long matrix[2][3];
+
 	for(int core = 0; core < 4; core++){
 		int numEntries = m.find(core+1)->second.size();
 		for(int i = 0; i < 2; i++){
@@ -22,20 +22,17 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 				matrix[i][j]=0;
 			}
 		}
-		matrix[0][0] = numEntries;
-		int interval = numEntries / 20;
 		//std::cout<<interval<<std::endl;
-		long long pi0pi0 = numEntries;
-		long long pi0pi1 = 0;
-		long long pi0f = 0;
-		long long pi1pi1 = 0;
-		long long pi1f = 0;
+		int pi0pi0 = numEntries;
+		double pi0pi1 = 0;
+		double pi0f = 0;
+		double pi1pi1 = 0;
+		double pi1f = 0;
 		for(int xVals = 0; xVals < numEntries; xVals++){
 			pi0pi1 += xVals * 30;
 			pi0f += m.find(core+1)->second[xVals];
-			pi1pi1 += (m.find(core+1)->second[xVals]) * (m.find(core+1)->second[xVals]);
+			pi1pi1 += (xVals * 30) * (xVals * 30);
 			pi1f += (m.find(core+1)->second[xVals]) * (xVals * 30);
-			//std::cout<<".";
 		}
 		matrix [0][0] = pi0pi0;
 		matrix[0][1] = pi0pi1;
@@ -43,71 +40,83 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 		matrix [1][0] = pi0pi1;
 		matrix [1][1] = pi1pi1;
 		matrix [1][2] = pi1f;
+//		cout<<"Pre: \n";
+//		for(int i = 0; i < 2; i++){
+//			for(int j = 0; j < 3; j++){
+//				cerr << matrix[i][j]<<"  ";
+//			}
+//			cerr<<std::endl;
+//		}
 
 		for(int i = 0; i < 2; i++){
 			reduce(matrix, i);
+			eliminate(matrix, i);
 		}
-
-		vector<int> solution(2);
-		//solution = gauss(matrix);
-		cout<<solution[0]<<" "<<solution[1]<<"x"<<endl;
-	}
-	for(int i = 0; i < 2; i++){
-		for(int j = 0; j < 3; j++){
-			std::cout << matrix[i][j]<<"  ";
-		}
-		std::cout<<std::endl;
-
-
+//		cerr<<endl<<endl<<"After: \n";
+//		for(int i = 0; i < 2; i++){
+//			for(int j = 0; j < 3; j++){
+//				cerr << matrix[i][j]<<"  ";
+//			}
+//			cerr<<std::endl;
+//		}
+//		cerr<<endl<<endl;
 	}
 
-}
-
-void LeastSquares::reduce(long long m[2][3], int i){
 
 }
 
-vector<int> LeastSquares::gauss(vector<vector <long long> > m){
-	int n = m.size();
-    for (int i=0; i<n; i++) {
-        // Search for maximum in this column
-        double maxEl = abs(m[i][i]);
-        int maxRow = i;
-        for (int k=i+1; k<n; k++) {
-            if (abs(m[k][i]) > maxEl) {
-                maxEl = abs(m[k][i]);
-                maxRow = k;
-            }
-        }
+void LeastSquares::reduce(double m[2][3], int i){
+//	cerr<<"before reduce "<<i<<endl;
+//	for(int i = 0; i < 2; i++){
+//		for(int j = 0; j < 3; j++){
+//			std::cout << m[i][j]<<"  ";
+//		}
+//		std::cout<<std::endl;
+//	}
 
-        // Swap maximum row with current row (column by column)
-        for (int k=i; k<n+1;k++) {
-            double tmp = m[maxRow][k];
-            m[maxRow][k] = m[i][k];
-            m[i][k] = tmp;
-        }
-
-        // Make all rows below this one 0 in current column
-        for (int k=i+1; k<2; k++) {
-            double c = -m[k][i]/m[i][i];
-            for (int j=i; j<n+1; j++) {
-                if (i==j) {
-                    m[k][j] = 0;
-                } else {
-                    m[k][j] += c * m[i][j];
-                }
-            }
-        }
-    }
-	    // Solve equation Ax=b for an upper triangular matrix A
-    vector<int> x(n);
-    for (int i=1; i>=0; i--) {
-        x[i] = m[i][n]/m[i][i];
-        for (int k=i-1;k>=0; k--) {
-            m[k][n] -= m[k][i] * x[i];
-        }
-    }
-
-    return x;
+	double factor = m[i][i];
+	//cout << "factor: "<<factor<<endl;
+	for(int index = i; index < 3; index++){
+		float temp = m[i][index];
+		//cout<< "temp: "<<temp<<endl;
+		m[i][index] = temp / factor;
+	}
+//	cerr<<"after reduce "<<i<<endl;
+//	for(int i = 0; i < 2; i++){
+//			for(int j = 0; j < 3; j++){
+//				std::cout << m[i][j]<<"  ";
+//			}
+//			std::cout<<std::endl;
+//		}
 }
 
+void LeastSquares::eliminate(double m[2][3], int i){
+//	cerr<< "before eliminate "<<i<<endl;
+//	for(int i = 0; i < 2; i++){
+//			for(int j = 0; j < 3; j++){
+//				std::cout << m[i][j]<<"  ";
+//			}
+//			std::cout<<std::endl;
+//		}
+	if(i == 0){
+		double factor = m[1][0];
+		for(int index = 0; index < 3; index++){
+			double temp = m[1][index];
+			m[1][index] = temp - (factor * m[0][index]);
+		}
+	}
+	if (i ==1){
+		double factor = m[0][1];
+		for(int index = 1; index < 3; index++){
+			double temp = m[0][index];
+			m[0][index] = temp - (factor * m[1][index]);
+		}
+	}
+//	cerr<< "after eliminate "<<i<<endl;
+//		for(int i = 0; i < 2; i++){
+//				for(int j = 0; j < 3; j++){
+//					std::cout << m[i][j]<<"  ";
+//				}
+//				std::cout<<std::endl;
+//			}
+}
