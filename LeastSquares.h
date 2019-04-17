@@ -28,8 +28,8 @@ public:
 
 private:
 	double matrix[2][3];
-	double c0 = matrix[0][2];
-	double c1 = matrix[1][2];
+	double c0;
+	double c1;
 };
 
 #endif /* LEASTSQUARES_H_ */

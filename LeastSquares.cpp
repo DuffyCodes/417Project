@@ -10,6 +10,9 @@
 #include <math.h>
 #include <iostream>
 #include <map>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -52,6 +55,15 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 			reduce(matrix, i);
 			eliminate(matrix, i);
 		}
+		c0 = matrix[0][2];
+		c1 = matrix[1][2];
+		fstream out;
+		ostringstream os;
+		os << "core_" << core << ".txt";
+		string fileName = os.str();
+		out.open(fileName, fstream::in | fstream::out | fstream::app);
+		out << "0 < x < "<<numEntries*30<<"; y= "<<c0<<" + "<<c1<<"x; Least Squares Approximation\n";
+		out.close();
 //		cerr<<endl<<endl<<"After: \n";
 //		for(int i = 0; i < 2; i++){
 //			for(int j = 0; j < 3; j++){

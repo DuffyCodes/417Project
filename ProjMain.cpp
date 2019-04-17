@@ -28,5 +28,6 @@ int main(int argc, char** argv)
     map<int, vector<float>> easierReadings = convertToMap(readings);
     LeastSquares least(easierReadings);
 
+
     return 0;
 }
