@@ -1,5 +1,6 @@
 #include "parseTemps.h"
 #include "processTemps.h"
+#include "LeastSquares.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -26,35 +27,7 @@ int main(int argc, char** argv)
     vector<CoreTempReading> readings = parse_raw_temps(input_temps);
     // Convert the readings to a map (easier for me to manipulate)
     map<int, vector<float>> easierReadings = convertToMap(readings);
-    //auto it = easierReadings.begin();
-
-    for(int i = 0; i < easierReadings.size(); i++){
-    	double slope = calcSlope(easierReadings, i+1);
-    	double intercept = calcIntercept(easierReadings, slope, i+1);
-    	ofstream core;
-    	char c = '0'+i;
-    	string coreNum = "core ";
-    	coreNum+=c;
-    	coreNum.append(".txt");
-    	core.open(coreNum);
-    	core << slope<<"x + "<<intercept<<endl;
-    	core.close();
-    	cout<<"core "<<i<<" finished. See .txt file"<<endl;
-    }
-
-    //cout << "line: "<<slope<<"x + "<<intercept<<endl;
-    /*
-    *
-    *debugging stuffs
-    *
-    for(auto it = easierReadings.begin(); it != easierReadings.end(); it++){
-        cout<<endl<<it->first<<endl;
-        for(int i = 0; i < it->second.size(); i++){
-            cout<<it->second[i]<<", ";
-        }
-
-    }
-    */
+    LeastSquares least(easierReadings);
 
     return 0;
 }
