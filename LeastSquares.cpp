@@ -43,7 +43,10 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 		matrix [1][0] = pi0pi1;
 		matrix [1][1] = pi1pi1;
 		matrix [1][2] = pi1f;
-//		cout<<"Pre: \n";
+		/*
+		 * debugging output
+		 */
+//		cerr<<"Pre: \n";
 //		for(int i = 0; i < 2; i++){
 //			for(int j = 0; j < 3; j++){
 //				cerr << matrix[i][j]<<"  ";
@@ -57,13 +60,13 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 		}
 		c0 = matrix[0][2];
 		c1 = matrix[1][2];
-		fstream out;
-		ostringstream os;
-		os << "core_" << core << ".txt";
-		string fileName = os.str();
-		out.open(fileName, fstream::in | fstream::out | fstream::app);
-		out << "0 < x < "<<numEntries*30<<"; y= "<<c0<<" + "<<c1<<"x; Least Squares Approximation\n";
-		out.close();
+//		fstream out;
+//		ostringstream os;
+//		os << "core_" << core << ".txt";
+//		string fileName = os.str();
+//		out.open(fileName, fstream::in | fstream::out | fstream::app);
+//		out << "0 < x < "<<numEntries*30<<"; y= "<<c0<<" + "<<c1<<"x; Least Squares Approximation\n";
+//		out.close();
 //		cerr<<endl<<endl<<"After: \n";
 //		for(int i = 0; i < 2; i++){
 //			for(int j = 0; j < 3; j++){
@@ -81,9 +84,9 @@ void LeastSquares::reduce(double m[2][3], int i){
 //	cerr<<"before reduce "<<i<<endl;
 //	for(int i = 0; i < 2; i++){
 //		for(int j = 0; j < 3; j++){
-//			std::cout << m[i][j]<<"  ";
+//			cerr << m[i][j]<<"  ";
 //		}
-//		std::cout<<std::endl;
+//		cerr<<endl;
 //	}
 
 	double factor = m[i][i];
@@ -96,9 +99,9 @@ void LeastSquares::reduce(double m[2][3], int i){
 //	cerr<<"after reduce "<<i<<endl;
 //	for(int i = 0; i < 2; i++){
 //			for(int j = 0; j < 3; j++){
-//				std::cout << m[i][j]<<"  ";
+//				cerr << m[i][j]<<"  ";
 //			}
-//			std::cout<<std::endl;
+//			cerr << endl;
 //		}
 }
 
@@ -106,9 +109,9 @@ void LeastSquares::eliminate(double m[2][3], int i){
 //	cerr<< "before eliminate "<<i<<endl;
 //	for(int i = 0; i < 2; i++){
 //			for(int j = 0; j < 3; j++){
-//				std::cout << m[i][j]<<"  ";
+//				cerr << m[i][j]<<"  ";
 //			}
-//			std::cout<<std::endl;
+//			cerr << :endl;
 //		}
 	if(i == 0){
 		double factor = m[1][0];
@@ -127,8 +130,8 @@ void LeastSquares::eliminate(double m[2][3], int i){
 //	cerr<< "after eliminate "<<i<<endl;
 //		for(int i = 0; i < 2; i++){
 //				for(int j = 0; j < 3; j++){
-//					std::cout << m[i][j]<<"  ";
+//					cerr << m[i][j]<<"  ";
 //				}
-//				std::cout<<std::endl;
+//				cerr << endl;
 //			}
 }
