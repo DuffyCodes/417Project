@@ -10,10 +10,9 @@
 #include <vector>
 #include <map>
 
-
 class LeastSquares {
 public:
-	LeastSquares(std::map<int, std::vector<float>> m);
+	LeastSquares(const std::map<int, std::vector<float>> m, std::string s);
 
 	void reduce(double m[2][3], int i);
 	void eliminate(double m[2][3], int i);
@@ -25,6 +24,8 @@ public:
 	double getC1() const {
 		return c1;
 	}
+
+	void printOutput(float c0, float c1, std::string s, int numEntries, int core);
 
 private:
 	double matrix[2][3];

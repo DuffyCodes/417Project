@@ -16,16 +16,28 @@
 
 using namespace std;
 
-LeastSquares::LeastSquares(map<int, vector<float>> m) {
+/**
+ * <pre>
+ * <b>LeastSquares</b>
+ * This pseudo-class will parse and create the LeastSquares Approximations
+ * </pre>
+ */
+
+/**
+ * This constructor creates the LeastSquares calculations
+ * @param m <b>Map of readings</b>
+ * @param s <b>Files to be parsed</b>
+ */
+LeastSquares::LeastSquares(map<int, vector<float>> m, string s) {
 
 	for(int core = 0; core < 4; core++){
-		int numEntries = m.find(core+1)->second.size();
+		int numEntries = m.find(core)->second.size();
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 3; j++){
 				matrix[i][j]=0;
 			}
 		}
-		//std::cout<<interval<<std::endl;
+
 		int pi0pi0 = numEntries;
 		double pi0pi1 = 0;
 		double pi0f = 0;
@@ -33,9 +45,9 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 		double pi1f = 0;
 		for(int xVals = 0; xVals < numEntries; xVals++){
 			pi0pi1 += xVals * 30;
-			pi0f += m.find(core+1)->second[xVals];
+			pi0f += m.find(core)->second[xVals];
 			pi1pi1 += (xVals * 30) * (xVals * 30);
-			pi1f += (m.find(core+1)->second[xVals]) * (xVals * 30);
+			pi1f += (m.find(core)->second[xVals]) * (xVals * 30);
 		}
 		matrix [0][0] = pi0pi0;
 		matrix[0][1] = pi0pi1;
@@ -60,13 +72,8 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 		}
 		c0 = matrix[0][2];
 		c1 = matrix[1][2];
-//		fstream out;
-//		ostringstream os;
-//		os << "core_" << core << ".txt";
-//		string fileName = os.str();
-//		out.open(fileName, fstream::in | fstream::out | fstream::app);
-//		out << "0 < x < "<<numEntries*30<<"; y= "<<c0<<" + "<<c1<<"x; Least Squares Approximation\n";
-//		out.close();
+
+		printOutput(c0, c1, s, numEntries, core);
 //		cerr<<endl<<endl<<"After: \n";
 //		for(int i = 0; i < 2; i++){
 //			for(int j = 0; j < 3; j++){
@@ -79,7 +86,11 @@ LeastSquares::LeastSquares(map<int, vector<float>> m) {
 
 
 }
-
+/**
+ * Matrix reduction function
+ * @param m <b>Matrix to be reduced</b>
+ * @param i <b>Column index</b>
+ */
 void LeastSquares::reduce(double m[2][3], int i){
 //	cerr<<"before reduce "<<i<<endl;
 //	for(int i = 0; i < 2; i++){
@@ -105,6 +116,11 @@ void LeastSquares::reduce(double m[2][3], int i){
 //		}
 }
 
+/**
+ * Matrix elimination
+ * @param m <b>Matrix to be altered</b>
+ * @param i <b>Index of the entry to eliminate based on</b>
+ */
 void LeastSquares::eliminate(double m[2][3], int i){
 //	cerr<< "before eliminate "<<i<<endl;
 //	for(int i = 0; i < 2; i++){
@@ -134,4 +150,32 @@ void LeastSquares::eliminate(double m[2][3], int i){
 //				}
 //				cerr << endl;
 //			}
+}
+
+/**
+ * Function to print output to a file
+ * @param c0 <b>c0</b>
+ * @param c1 <b>c1</b>
+ * @param s <b>File being parsed</b>
+ * @param numEntries <b>How many readings being parsed</b>
+ * @param core <b>The core being parsed</b>
+ */
+void LeastSquares::printOutput(float c0, float c1, string s, int numEntries, int core){
+	fstream out;
+	ostringstream os;
+	os << "core_" << core << ".txt";
+	string fileName = os.str();
+	out.open(fileName, fstream::in | fstream::out | fstream::app);
+	out << "***********************************************************************\n";
+	out << s;
+	out << "\n***********************************************************************\n";
+	out << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+	out << "LEAST SQUARES APPROXIMATION\n";
+	out << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+	out << "0 < x < "<<numEntries*30<<"; y= "<<c0;
+	if(c1 >= 0)
+		out << " + "<<c1<<"x; Least Squares Approximation\n";
+	else
+		out << " - "<<abs(c1)<<"x; Least Squares Approximation\n";
+	out.close();
 }

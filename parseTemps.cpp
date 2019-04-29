@@ -9,6 +9,7 @@
 #include "parseTemps.h"
 
 //------------------------------------------------------------------------------
+// Function provided by T. Kennedy of Old Dominion University
 std::vector<CoreTempReading> parse_raw_temps(std::istream& original_temps,
                                              int step_size)
 {
@@ -35,9 +36,14 @@ std::vector<CoreTempReading> parse_raw_temps(std::istream& original_temps,
 
     return allTheReadings;
 }
+
+/**
+ * Function to create a more accessible and usable data structure
+ * @param readings <b>All the readings in a inconveniently ordered container</b>
+ */
 std::map<int, std::vector<float>> convertToMap(std::vector<CoreTempReading> readings){
 
-    std::map<int, std::vector<float>> easierReadings;
+	std::map<int, std::vector<float>> easierReadings;
     std::vector<float> first, second, third, fourth;
 
     for(auto it = readings.begin(); it != readings.end(); it++){
@@ -46,10 +52,10 @@ std::map<int, std::vector<float>> convertToMap(std::vector<CoreTempReading> read
         third.push_back(it->second[2]);
         fourth.push_back(it->second[3]);
     }
-    easierReadings.insert(std::pair<int, std::vector<float>>(1, first));
-    easierReadings.insert(std::pair<int, std::vector<float>>(2, second));
-    easierReadings.insert(std::pair<int, std::vector<float>>(3, third));
-    easierReadings.insert(std::pair<int, std::vector<float>>(4, fourth));
+    easierReadings.insert(std::pair<int, std::vector<float>>(0, first));
+    easierReadings.insert(std::pair<int, std::vector<float>>(1, second));
+    easierReadings.insert(std::pair<int, std::vector<float>>(2, third));
+    easierReadings.insert(std::pair<int, std::vector<float>>(3, fourth));
 
     return easierReadings;
 }
